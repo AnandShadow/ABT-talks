@@ -8,42 +8,45 @@ export default function Dashboard() {
   const progressPercent = Math.round((completedCount / 60) * 100);
 
   return (
-    <div className="flex flex-col min-h-screen p-6 pb-24 bg-black">
+    <div className="flex flex-col min-h-screen p-10 pb-32 relative z-10">
       {/* Header */}
-      <header className="flex items-center justify-between py-6">
-        <div className="flex items-center space-x-3">
+      <header className="flex items-center justify-between py-8">
+        <div className="flex items-center space-x-4">
           <img 
             src={mockUser.avatarUrl} 
             alt={mockUser.name} 
-            className="w-10 h-10 rounded-full border border-zinc-800"
+            className="w-12 h-12 rounded-full border border-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
           />
           <div>
-            <p className="text-xs text-zinc-500">Welcome back,</p>
-            <h2 className="font-semibold text-white leading-tight">{mockUser.name}</h2>
+            <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">Welcome back</p>
+            <h2 className="font-medium text-white leading-tight drop-shadow-sm">{mockUser.name}</h2>
           </div>
         </div>
       </header>
 
       {/* Stats Card */}
-      <section className="mt-4 p-6 border border-zinc-900 rounded-2xl bg-zinc-950/30">
-        <div className="flex items-end justify-between mb-6">
+      <section className="mt-8 p-8 bg-white/[0.02] border border-white/[0.05] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] rounded-3xl backdrop-blur-sm relative">
+        <div className="flex items-end justify-between mb-10">
           <div>
-            <p className="text-sm text-zinc-500 mb-1">Current Streak</p>
-            <div className="flex items-center text-4xl font-bold tracking-tighter-luxury">
-              {mockUser.streak} <span className="text-zinc-600 text-2xl ml-2">days</span>
+            <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Current Streak</p>
+            <div className="flex items-center text-5xl font-light tracking-tighter-luxury bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+              {mockUser.streak} <span className="text-zinc-600 text-2xl font-medium ml-3 mt-2">days</span>
             </div>
           </div>
-          <Flame className="text-orange-500 mb-1" size={28} />
+          <div className="relative">
+            <div className="absolute inset-0 bg-white/10 blur-[20px] rounded-full"></div>
+            <Flame className="text-zinc-300 mb-2 relative" size={28} strokeWidth={1.5} />
+          </div>
         </div>
         
         <div>
-          <div className="flex justify-between text-xs mb-2">
-            <span className="text-zinc-400">Progress</span>
-            <span className="text-white font-medium">{progressPercent}%</span>
+          <div className="flex justify-between text-[10px] uppercase tracking-widest mb-3">
+            <span className="text-zinc-500">Progress</span>
+            <span className="text-zinc-300 font-medium">{progressPercent}%</span>
           </div>
-          <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-black/50 rounded-full border border-white/[0.05] overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]">
             <div 
-              className="h-full bg-white rounded-full transition-all duration-1000"
+              className="h-full bg-gradient-to-r from-zinc-500 to-white transition-all duration-1000 rounded-full"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -52,19 +55,19 @@ export default function Dashboard() {
 
       {/* Today's Mission Action */}
       {currentDay && (
-        <section className="mt-8">
+        <section className="mt-12">
           <Link 
             href={`/day/${currentDay.dayNumber}`}
-            className="group flex flex-col p-6 bg-white rounded-2xl transition-transform active:scale-95 hover:scale-[1.02]"
+            className="flex flex-col p-8 bg-white/[0.02] border border-white/[0.05] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] rounded-3xl transition-all hover:bg-white/[0.04] active:scale-[0.98] backdrop-blur-sm"
           >
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-xs font-bold uppercase tracking-widest text-zinc-500">Today's Mission</span>
-              <ArrowRight className="text-black group-hover:translate-x-1 transition-transform" size={18} />
+            <div className="flex justify-between items-center mb-6">
+              <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-500">Today's Mission</span>
+              <ArrowRight className="text-zinc-400" size={16} strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-bold text-black tracking-tight-luxury mb-1">
+            <h3 className="text-3xl font-light tracking-tighter-luxury mb-3 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
               {currentDay.title}
             </h3>
-            <p className="text-sm text-zinc-600 line-clamp-2">
+            <p className="text-sm text-zinc-500 leading-relaxed">
               {currentDay.description}
             </p>
           </Link>
@@ -72,24 +75,24 @@ export default function Dashboard() {
       )}
 
       {/* 60-Day Grid */}
-      <section className="mt-12 mb-8">
-        <h3 className="text-sm font-semibold text-zinc-300 mb-6">The 60-Day Journey</h3>
-        <div className="grid grid-cols-6 gap-2 sm:gap-3">
+      <section className="mt-16 mb-8">
+        <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 mb-8">The 60-Day Journey</h3>
+        <div className="grid grid-cols-6 gap-3 sm:gap-4">
           {mockDays.map((day) => {
-            let cellStyle = "bg-zinc-900/50 border border-transparent text-zinc-600"; // locked
+            let cellStyle = "text-zinc-700 bg-white/[0.01] border border-white/[0.02]"; // locked
             
             if (day.status === 'completed') {
-              cellStyle = "bg-white text-black font-bold border-white";
+              cellStyle = "bg-white/[0.05] text-zinc-300 font-medium border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]";
             } else if (day.status === 'current') {
-              cellStyle = "bg-black text-white font-bold border-white relative before:absolute before:inset-0 before:ring-2 before:ring-white/20 before:rounded-lg";
+              cellStyle = "bg-white text-zinc-900 font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)]";
             } else if (day.status === 'missed') {
-              cellStyle = "bg-zinc-950 text-red-900/50 border border-red-900/20";
+              cellStyle = "bg-black text-zinc-600 border border-white/[0.05] border-dashed";
             }
 
             return (
               <div 
                 key={day.dayNumber}
-                className={`aspect-square rounded-lg flex items-center justify-center text-xs transition-colors ${cellStyle}`}
+                className={`aspect-square flex items-center justify-center text-xs transition-colors rounded-xl ${cellStyle}`}
               >
                 {day.dayNumber}
               </div>
