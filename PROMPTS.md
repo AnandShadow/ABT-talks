@@ -27,5 +27,4 @@ During live testing on Vercel, the serverless environment kept resetting the sta
 - **Prompt:** "submit proof of work not working"
 - **AI Action:** Diagnosed a hidden HTML5 native validation blocker (`type="url"`) and an async React state bug. Rewrote the submit logic to be fully synchronous and relaxed the input validation for testing.
 
----
-*Generated via Antigravity Session Log*
+
