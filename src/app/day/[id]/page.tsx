@@ -1,15 +1,20 @@
+"use client";
+
+import { use, useTransition } from "react";
 import Link from "next/link";
 import { getDay } from "@/lib/mockData";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { notFound } from "next/navigation";
+import { submitProofOfWork } from "@/app/actions";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
 
-export default async function DayPage({ params }: Props) {
-  const { id } = await params;
+export default function DayPage({ params }: Props) {
+  const { id } = use(params);
   const day = getDay(parseInt(id, 10));
+  const [isPending, startTransition] = useTransition();
 
   if (!day) {
     notFound();
@@ -61,7 +66,14 @@ export default async function DayPage({ params }: Props) {
         </section>
 
         {/* Submission Form */}
-        <section className="space-y-6">
+        <form 
+          className="space-y-6"
+          action={() => {
+            startTransition(() => {
+              submitProofOfWork(day.dayNumber);
+            });
+          }}
+        >
           <h2 className="text-sm font-semibold uppercase tracking-widest text-zinc-500 mb-4">
             Proof of Work
           </h2>
@@ -96,15 +108,20 @@ export default async function DayPage({ params }: Props) {
               className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-zinc-500 transition-colors resize-none"
             />
           </div>
-        </section>
-      </main>
 
-      {/* Floating Action Bar */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[342px] z-50">
-        <button className="w-full py-4 bg-white text-black font-bold rounded-xl shadow-[0_0_40px_rgba(255,255,255,0.1)] active:scale-95 transition-transform flex items-center justify-center">
-          Submit Proof of Work
-        </button>
-      </div>
+
+          {/* Floating Action Bar */}
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[342px] z-50">
+            <button 
+              type="submit"
+              disabled={isPending}
+              className="w-full py-4 bg-white text-black font-bold rounded-xl shadow-[0_0_40px_rgba(255,255,255,0.1)] active:scale-95 transition-transform flex items-center justify-center disabled:opacity-50 disabled:active:scale-100"
+            >
+              {isPending ? "Submitting..." : "Submit Proof of Work"}
+            </button>
+          </div>
+        </form>
+      </main>
     </div>
   );
 }
