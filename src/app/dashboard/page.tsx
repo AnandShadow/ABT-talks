@@ -1,10 +1,13 @@
+"use client";
+
 import Link from "next/link";
-import { mockUser, mockDays } from "@/lib/mockData";
 import { Flame, ArrowRight } from "lucide-react";
+import { useAppState } from "@/lib/AppStateContext";
 
 export default function Dashboard() {
-  const currentDay = mockDays.find(d => d.status === 'current');
-  const completedCount = mockDays.filter(d => d.status === 'completed').length;
+  const { user, days } = useAppState();
+  const currentDay = days.find(d => d.status === 'current');
+  const completedCount = days.filter(d => d.status === 'completed').length;
   const progressPercent = Math.round((completedCount / 60) * 100);
 
   return (
@@ -13,13 +16,13 @@ export default function Dashboard() {
       <header className="flex items-center justify-between py-8">
         <div className="flex items-center space-x-4">
           <img 
-            src={mockUser.avatarUrl} 
-            alt={mockUser.name} 
+            src={user.avatarUrl} 
+            alt={user.name} 
             className="w-12 h-12 rounded-full border border-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
           />
           <div>
             <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">Welcome back</p>
-            <h2 className="font-medium text-white leading-tight drop-shadow-sm">{mockUser.name}</h2>
+            <h2 className="font-medium text-white leading-tight drop-shadow-sm">{user.name}</h2>
           </div>
         </div>
       </header>
@@ -30,7 +33,7 @@ export default function Dashboard() {
           <div>
             <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Current Streak</p>
             <div className="flex items-center text-5xl font-light tracking-tighter-luxury bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-              {mockUser.streak} <span className="text-zinc-600 text-2xl font-medium ml-3 mt-2">days</span>
+              {user.streak} <span className="text-zinc-600 text-2xl font-medium ml-3 mt-2">days</span>
             </div>
           </div>
           <div className="relative">
@@ -78,7 +81,7 @@ export default function Dashboard() {
       <section className="mt-16 mb-8">
         <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 mb-8">The 60-Day Journey</h3>
         <div className="grid grid-cols-6 gap-3 sm:gap-4">
-          {mockDays.map((day) => {
+          {days.map((day) => {
             let cellStyle = "text-zinc-700 bg-white/[0.01] border border-white/[0.02]"; // locked
             
             if (day.status === 'completed') {

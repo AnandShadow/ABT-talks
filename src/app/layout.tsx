@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppStateProvider } from "@/lib/AppStateContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,9 +28,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center min-h-screen`}
       >
-        <main className="w-full max-w-[390px] min-h-screen border-x border-white/[0.05] relative shadow-2xl shadow-black/50 overflow-hidden before:absolute before:top-[-200px] before:left-1/2 before:-translate-x-1/2 before:w-[600px] before:h-[600px] before:bg-white/[0.05] before:blur-[100px] before:rounded-full before:pointer-events-none before:-z-10">
-          {children}
-        </main>
+        <AppStateProvider>
+          <main className="w-full max-w-[390px] min-h-screen border-x border-white/[0.05] relative shadow-2xl shadow-black/50 overflow-hidden before:absolute before:top-[-200px] before:left-1/2 before:-translate-x-1/2 before:w-[600px] before:h-[600px] before:bg-white/[0.05] before:blur-[100px] before:rounded-full before:pointer-events-none before:-z-10">
+            {children}
+          </main>
+        </AppStateProvider>
       </body>
     </html>
   );

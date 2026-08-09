@@ -18,14 +18,14 @@ export interface ChallengeDay {
   status: 'completed' | 'current' | 'locked' | 'missed';
 }
 
-export let mockUser: User = {
+export const initialMockUser: User = {
   name: "Alex",
   avatarUrl: "https://api.dicebear.com/9.x/notionists/svg?seed=Alex",
   streak: 11,
   totalCompleted: 11,
 };
 
-export let mockDays: ChallengeDay[] = Array.from({ length: 60 }, (_, i) => {
+export const initialMockDays: ChallengeDay[] = Array.from({ length: 60 }, (_, i) => {
   const dayNumber = i + 1;
   let status: ChallengeDay['status'] = 'locked';
   
@@ -47,17 +47,3 @@ export let mockDays: ChallengeDay[] = Array.from({ length: 60 }, (_, i) => {
     status,
   };
 });
-
-export const getDay = (id: number) => mockDays.find(d => d.dayNumber === id);
-
-export function completeDay(dayId: number) {
-  const dayIndex = mockDays.findIndex(d => d.dayNumber === dayId);
-  if (dayIndex !== -1 && mockDays[dayIndex].status === 'current') {
-    mockDays[dayIndex].status = 'completed';
-    if (dayIndex + 1 < mockDays.length) {
-      mockDays[dayIndex + 1].status = 'current';
-    }
-    mockUser.streak += 1;
-    mockUser.totalCompleted += 1;
-  }
-}

@@ -2,10 +2,10 @@
 
 import { use, useTransition } from "react";
 import Link from "next/link";
-import { getDay } from "@/lib/mockData";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { notFound } from "next/navigation";
-import { submitProofOfWork } from "@/app/actions";
+import { useAppState } from "@/lib/AppStateContext";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -13,8 +13,10 @@ type Props = {
 
 export default function DayPage({ params }: Props) {
   const { id } = use(params);
+  const { getDay, completeDay } = useAppState();
   const day = getDay(parseInt(id, 10));
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   if (!day) {
     notFound();
@@ -68,9 +70,11 @@ export default function DayPage({ params }: Props) {
         {/* Submission Form */}
         <form 
           className="space-y-10"
-          action={() => {
+          onSubmit={(e) => {
+            e.preventDefault();
             startTransition(() => {
-              submitProofOfWork(day.dayNumber);
+              completeDay(day.dayNumber);
+              router.push('/dashboard');
             });
           }}
         >
