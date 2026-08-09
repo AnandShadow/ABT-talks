@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useTransition } from "react";
+import { use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
@@ -15,7 +15,6 @@ export default function DayPage({ params }: Props) {
   const { id } = use(params);
   const { getDay, completeDay } = useAppState();
   const day = getDay(parseInt(id, 10));
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   if (!day) {
@@ -72,10 +71,8 @@ export default function DayPage({ params }: Props) {
           className="space-y-10"
           onSubmit={(e) => {
             e.preventDefault();
-            startTransition(() => {
-              completeDay(day.dayNumber);
-              router.push('/dashboard');
-            });
+            completeDay(day.dayNumber);
+            router.push('/dashboard');
           }}
         >
           <h2 className="text-[10px] font-medium uppercase tracking-widest text-zinc-500 mb-6">
@@ -85,7 +82,7 @@ export default function DayPage({ params }: Props) {
           <div className="space-y-3">
             <label htmlFor="github" className="text-[10px] uppercase tracking-widest text-zinc-500 block">GitHub Commit URL</label>
             <input 
-              type="url" 
+              type="text" 
               id="github"
               placeholder="https://github.com/..." 
               className="w-full bg-white/[0.02] border border-white/[0.05] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] rounded-2xl px-5 py-4 text-white text-sm focus:outline-none focus:border-white/20 focus:bg-white/[0.04] transition-all"
@@ -95,7 +92,7 @@ export default function DayPage({ params }: Props) {
           <div className="space-y-3">
             <label htmlFor="linkedin" className="text-[10px] uppercase tracking-widest text-zinc-500 block">LinkedIn Post URL</label>
             <input 
-              type="url" 
+              type="text" 
               id="linkedin"
               placeholder="https://linkedin.com/..." 
               className="w-full bg-white/[0.02] border border-white/[0.05] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] rounded-2xl px-5 py-4 text-white text-sm focus:outline-none focus:border-white/20 focus:bg-white/[0.04] transition-all"
@@ -117,10 +114,9 @@ export default function DayPage({ params }: Props) {
           <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-[calc(100%-5rem)] max-w-[342px] z-50">
             <button 
               type="submit"
-              disabled={isPending}
-              className="w-full py-5 bg-zinc-100 text-zinc-900 shadow-[0_2px_15px_rgba(255,255,255,0.15)] font-medium rounded-xl hover:bg-white active:scale-[0.98] transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:active:scale-100"
+              className="w-full py-5 bg-zinc-100 text-zinc-900 shadow-[0_2px_15px_rgba(255,255,255,0.15)] font-medium rounded-xl hover:bg-white active:scale-[0.98] transition-all duration-200 flex items-center justify-center"
             >
-              {isPending ? "Submitting..." : "Submit Proof of Work"}
+              Submit Proof of Work
             </button>
           </div>
         </form>
